@@ -1,0 +1,200 @@
+step37
+======
+	Write a code for POST method inside "EmployeeController.java" file.
+
+EmployeeController.java
+------------------------
+package com.ihub.www.controller;
+
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.ihub.www.model.Employee;
+import com.ihub.www.service.EmployeeService;
+
+@CrossOrigin(origins = "http://localhost:3000")
+@RestController
+@RequestMapping("/api/v1/")
+public class EmployeeController 
+{
+	@Autowired
+	EmployeeService employeeService; 
+	
+	@GetMapping("/employees")
+	public List<Employee> getAllEmployees()
+	{
+		return employeeService.getAllEmployees();
+	}
+	
+	@PostMapping("/employees")
+	public Employee addEmployee(@RequestBody Employee employee)
+	{
+		return employeeService.addEmployee(employee);
+	}
+}
+
+step38:
+-------
+	Write a code for POST method inside "EmployeeService.java" file.
+
+EmployeeService.java
+---------------------
+package com.ihub.www.service;
+
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.ihub.www.model.Employee;
+import com.ihub.www.repo.EmployeeRepository;
+
+@Service
+public class EmployeeService 
+{
+	@Autowired
+	EmployeeRepository employeeRepository;
+	
+	public List<Employee> getAllEmployees()
+	{
+		return employeeRepository.findAll();
+	}
+	
+	public Employee addEmployee(Employee employee)
+	{
+		return employeeRepository.save(employee);
+	}
+}
+
+step39:
+-------
+	Add post method inside "EmployeeService.js" file.
+
+EmployeeService.js
+------------------
+import axios from 'axios';
+
+const EMPLOYEE_API="http://localhost:9191/api/v1/employees";
+
+class EmployeeService
+{
+    getEmployees()
+    {
+        return axios.get(EMPLOYEE_API);
+    }
+
+    addEmployee(employee)
+    {
+        return axios.post(EMPLOYEE_API,employee); 
+    }
+}
+export default new EmployeeService();
+
+
+step40:
+------
+	Create a form inside "CreateEmployeeComponent.js" file.
+
+CreateEmployeeComponent.js
+--------------------------
+import React from 'react'
+import {useNavigate} from 'react-router-dom';
+import { useState } from 'react';
+import EmployeeService from '../services/EmployeeService';
+
+function CreateEmployeeComponent() {
+
+  let navigate=useNavigate();
+
+  const [employee,setEmployee]=useState({
+      firstName:"",
+      lastName:"",
+      email:""
+  })
+
+  const cancelHandle=()=>
+  {
+      navigate("/employees");
+  }
+
+  const handleChange=(e)=>
+  {
+    const name = e.target.name;
+    const value= e.target.value;
+    setEmployee({... employee,[name]:value});
+  }
+
+  const saveHandle=(e)=>
+  {
+      e.preventDefault();
+      console.log(JSON.stringify(employee));
+
+      EmployeeService.addEmployee(employee).then((res)=>
+      {
+        navigate("/employees");
+      })
+  }
+
+
+  return (
+    <div className='container'>
+         <div className='row mt-2'>
+            <div className='col-6 offset-md-3'>
+              <div className='card p-5'>
+              <h3 className='text-center'> Add Employee </h3> 
+                 <form>
+                    <div className='form-group'>
+                        <label className='my-3'>First Name :</label>
+                        <input type="text" name="firstName" id='firstName' className='form-control'
+                        value={employee.firstName}
+                        onChange={handleChange}/>
+                      
+                        <label className='my-3'>Last Name :</label>
+                        <input type="text" name="lastName" id='lastName' className='form-control'
+                        value={employee.lastName}
+                        onChange={handleChange}/>
+                      
+                        <label className='my-3'>Email :</label>
+                        <input type="text" name="email" id='email' className='form-control'
+                        value={employee.email}
+                        onChange={handleChange}/>
+                      
+                        <button className='mt-3 btn btn-danger' onClick={cancelHandle}>cancel</button>
+                        <button className='mt-3 btn btn-success ms-3' onClick={saveHandle}>save</button>
+                    </div>
+                  </form>
+              </div>
+            </div>
+          </div> 
+    </div>
+  )
+}
+
+export default CreateEmployeeComponent
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

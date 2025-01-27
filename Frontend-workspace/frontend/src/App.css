@@ -1,0 +1,24 @@
+.footer
+{
+  position: absolute;
+  bottom: 0;
+  background-color: #000;
+  width: 100%;
+  height:40px;
+  color:white;
+  text-align: center;
+  line-height: 35px;
+}
+.footer a
+{
+  color: white;
+  text-decoration: none;
+}
+.footer a:hover
+{
+  color: aqua;
+}
+.header a:hover
+{
+  color: aqua;
+}

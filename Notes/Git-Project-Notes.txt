@@ -1,0 +1,41 @@
+Remote Repository :
+			https://github.com/code-withakshay/employee-management-system
+
+
+Push the code 
+==============
+
+Add the files (react files)
+
+git init 
+
+git branch --move master main 
+
+git add . 
+
+git commit -m "my frontend"
+
+git remote add origin https://github.com/code-withakshay/employee-management-system
+
+git push -f origin main 
+
+Pull the code 
+=============
+
+git init 
+
+git pull https://github.com/code-withakshay/employee-management-system
+
+
+
+
+
+
+
+
+
+
+
+
+
+

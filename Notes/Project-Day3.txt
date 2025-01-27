@@ -1,0 +1,260 @@
+step28:
+-------
+	Create a "HeaderComponent.js" file inside "components" folder.
+
+HeaderComponent.java
+--------------------
+import React from 'react'
+
+function HeaderComponent() 
+{
+  return (
+        <header>
+            <nav className='navbar navbar-expand-lg navbar-dark bg-dark'>
+                <div className='container'>
+                   <a href="" className='navbar-brand'> Employee Management System</a>
+                </div>
+            </nav>
+        </header>
+  )
+}
+
+export default HeaderComponent
+
+
+step29:
+------
+	Create a "FooterComponent.js" file inside "components" folder.
+
+FooterComponent.js
+-------------------
+import React from 'react'
+import '../App.css';
+
+function FooterComponent() {
+  return (
+        <footer className='footer'>
+            <small>All Right Reserved &copy; by Niyaz Sir</small>
+        </footer>
+  )
+}
+
+export default FooterComponent
+
+step30:
+------
+	Declare css styles for FooterComponent.js file inside App.css file.
+
+App.css
+--------
+.footer
+{
+  position: absolute;
+  bottom: 0;
+  background-color: #000;
+  width: 100%;
+  height:40px;
+  color:white;
+  text-align: center;
+  line-height: 35px;
+}
+
+step31:
+-------
+	Download react router library for routing.
+	ex:
+		> npm install react-router-dom 
+
+
+step32:
+------
+	Make App.js file as a routing file.
+
+App.js 
+------
+import React from 'react'
+import EmployeeListComponent from './components/EmployeeListComponent'
+import HeaderComponent from './components/HeaderComponent'
+import FooterComponent from './components/FooterComponent'
+import {BrowserRouter, Routes, Route} from 'react-router-dom';
+
+function App() {
+  return (
+    <div>
+        <HeaderComponent/>
+        
+        <BrowserRouter>
+        
+        <div class="container">
+            <Routes>
+              <Route exact path="/" element={<EmployeeListComponent/>}></Route>
+              <Route path="/employees" element={<EmployeeListComponent/>}></Route>
+            </Routes>
+        </div>
+
+        </BrowserRouter>
+
+        <FooterComponent/>
+    </div>
+  )
+}
+
+export default App
+
+
+
+step33:
+------
+	Test the below request url's for routing.
+	ex:
+		http://localhost:3000/
+		http://localhost:3000/employees 
+
+step34:
+------
+	Create "CreateEmployeeComponent.js" file inside "components" folder.
+	
+CreateEmployeeComponent.js
+--------------------------
+import React from 'react'
+
+function CreateEmployeeComponent() {
+  return (
+    <div>
+            Create Employee Component
+    </div>
+  )
+}
+
+export default CreateEmployeeComponent
+
+step35:
+-------
+	Add CreateEmployeeComponent.js file to routing file.
+
+App.js
+------
+import React from 'react'
+import EmployeeListComponent from './components/EmployeeListComponent'
+import HeaderComponent from './components/HeaderComponent'
+import FooterComponent from './components/FooterComponent'
+import {BrowserRouter, Routes, Route} from 'react-router-dom';
+import CreateEmployeeComponent from './components/CreateEmployeeComponent';
+
+function App() {
+  return (
+    <div>
+        <HeaderComponent/>
+        
+        <BrowserRouter>
+        
+        <div class="container">
+            <Routes>
+              <Route exact path="/" element={<EmployeeListComponent/>}></Route>
+              <Route path="/employees" element={<EmployeeListComponent/>}></Route>
+              <Route path="/add-employee" element={<CreateEmployeeComponent/>}></Route>
+            </Routes>
+        </div>
+
+        </BrowserRouter>
+
+        <FooterComponent/>
+    </div>
+  )
+}
+
+export default App
+
+step36:
+------
+	Create a add button to EmployeeListComponent.js file to add the employee details.
+
+EmployeeListComponent.js
+------------------------
+import React, { Component } from 'react'
+import EmployeeService from '../services/EmployeeService.js';
+import {Link} from 'react-router-dom';
+
+export default class EmployeeListComponent extends Component 
+{
+  constructor(props)
+  {
+        super(props);
+
+        this.state={
+            employees:[]
+        }
+  }  
+  componentDidMount()
+  {
+    EmployeeService.getEmployees().then((res)=>{
+        this.setState({employees:res.data});
+    })
+  }
+  render() 
+  {
+    return (
+      <div className='container mt-3'>
+            <h4 className='text-center'> Employee List </h4>
+            <div className='row mt-4'>
+            <Link to="/add-employee" className='btn btn-primary mb-3'> Add Employee </Link>
+                <table className='table table-bordered table-striped'>
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>FIRST-NAME</th>
+                            <th>LAST-NAME</th>
+                            <th>EMAIL</th>
+                            <th>ACTION</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {
+                            this.state.employees.map((employee)=>{
+                                return <tr>
+                                            <td>{employee.id}</td>
+                                            <td>{employee.firstName}</td>
+                                            <td>{employee.lastName}</td>
+                                            <td>{employee.email}</td>
+                                        </tr>
+                            })
+                        }
+                    </tbody>
+                </table>
+            </div>
+      </div>
+    )
+  }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

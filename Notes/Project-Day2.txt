@@ -1,0 +1,273 @@
+React project
+==============
+
+Project structure 
+-----------------
+react-frontend
+	|
+	|------node_modules
+	|
+	|------public
+	|
+	|------src
+		|
+		|---index.js
+		|---App.js
+		|---App.css
+		|
+		|---components	
+			|
+			|---EmployeeListComponent.js
+
+		|---services
+			|
+			|---EmployeeService.js
+	|---package.json
+	|---READMD.md
+
+step16:
+-------
+	Launch VSC code editor from "react-workspace".
+	ex:
+		react-projects>  code . 
+
+step17:
+------
+	Create a react project i.e react-frontend.
+	ex:
+		npx create-react-app  react-frontend
+
+step18:
+-------
+	Switch to the project.
+	ex:
+		cd  react-frontend
+
+
+step19:
+-------
+	Install bootstrap and axios library.
+	ex:
+		npm install bootstrap
+		npm install --save axios
+
+step20:
+------
+	Run react application.
+	ex:
+		npm start 
+
+step21:
+-------
+	Import bootstrap in index.js file.
+
+index.js
+--------
+import React from 'react';
+import ReactDOM from 'react-dom/client';
+import './index.css';
+import App from './App';
+import reportWebVitals from './reportWebVitals';
+import '../node_modules/bootstrap/dist/css/bootstrap.css';
+
+const root = ReactDOM.createRoot(document.getElementById('root'));
+root.render(
+  <React.StrictMode>
+    <App />
+  </React.StrictMode>
+);
+
+// If you want to start measuring performance in your app, pass a function
+// to log results (for example: reportWebVitals(console.log))
+// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
+reportWebVitals();
+
+step22
+-------
+	Create a "services" folder inside "src" folder.
+	
+step23:
+-------
+	Create EmployeeService.js file inside "services" folder.
+
+EmployeeService.js
+------------------
+import axios from 'axios';
+
+const EMPLOYEE_API="http://localhost:9191/api/v1/employees";
+
+class EmployeeService
+{
+    getEmployees()
+    {
+        return axios.get(EMPLOYEE_API);
+    }
+}
+export default new EmployeeService();
+
+step24:
+------
+	Create "components" folder inside "src" folder.
+
+step25:
+-------
+	Create EmployeeListComponent.js file inside "components" folder.
+	ex:
+		shortcut : rcc
+
+EmployeeListComponent.js
+------------------------
+import React, { Component } from 'react'
+import EmployeeService from '../services/EmployeeService.js';
+
+export default class EmployeeListComponent extends Component 
+{
+  constructor(props)
+  {
+        super(props);
+
+        this.state={
+            employees:[]
+        }
+  }  
+  componentDidMount()
+  {
+    EmployeeService.getEmployees().then((res)=>{
+        this.setState({employees:res.data});
+    })
+  }
+  render() 
+  {
+    return (
+      <div className='container mt-3'>
+            <h4 className='text-center'> Employee List </h4>
+            <div className='row mt-4'>
+                <table className='table table-bordered table-striped'>
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>FIRST-NAME</th>
+                            <th>LAST-NAME</th>
+                            <th>EMAIL</th>
+                            <th>ACTION</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {
+                            this.state.employees.map((employee)=>{
+                                return <tr>
+                                            <td>{employee.id}</td>
+                                            <td>{employee.firstName}</td>
+                                            <td>{employee.lastName}</td>
+                                            <td>{employee.email}</td>
+                                        </tr>
+                            })
+                        }
+                    </tbody>
+                </table>
+            </div>
+      </div>
+    )
+  }
+}
+
+
+step26:
+-------
+	Import "EmployeeListComponent.js" file inside "App.js" file.
+
+App.js
+------
+import React from 'react'
+import EmployeeListComponent from './components/EmployeeListComponent'
+
+function App() {
+  return (
+    <div>
+        <EmployeeListComponent/>
+    </div>
+  )
+}
+
+export default App
+
+
+
+step27:
+-------
+	Add "@CrossOrigin" annotation in spring boot EmployeeController.java file.
+
+EmployeeController.java
+-----------------------
+package com.ihub.www.controller;
+
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.ihub.www.model.Employee;
+import com.ihub.www.service.EmployeeService;
+
+@CrossOrigin(origins = "http://localhost:3000")
+@RestController
+@RequestMapping("/api/v1/")
+public class EmployeeController 
+{
+	@Autowired
+	EmployeeService employeeService; 
+	
+	@GetMapping("/employees")
+	public List<Employee> getAllEmployees()
+	{
+		return employeeService.getAllEmployees();
+	}
+}
+
+
+
+
+
+
+
+
+
+
+		
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
